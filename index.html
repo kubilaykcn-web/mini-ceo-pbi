@@ -60,38 +60,23 @@
     }
     .label { font-size: 14px; font-weight: 500; margin-bottom: 8px; display: block; }
     .label span { font-weight: 400; color: var(--text-tertiary); }
-    .input, .textarea {
+    .textarea {
       width: 100%;
-      padding: 12px 14px;
+      min-height: 140px;
+      padding: 14px 16px;
       border: 1px solid var(--border);
       border-radius: 10px;
       font-size: 15px;
       line-height: 1.6;
+      resize: vertical;
       background: var(--bg);
       color: var(--text-primary);
       outline: none;
       transition: border-color 0.2s;
       font-family: var(--font-sans);
     }
-    .input:focus, .textarea:focus { border-color: var(--text-primary); }
-    .input::placeholder, .textarea::placeholder { color: var(--text-quaternary); }
-    .textarea { min-height: 120px; resize: vertical; }
-    .input { margin-bottom: 16px; }
-
-    .api-row {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      margin-bottom: 16px;
-    }
-    .api-row .input { margin-bottom: 0; flex: 1; }
-    .api-help {
-      font-size: 12px;
-      color: var(--text-tertiary);
-      margin-top: 6px;
-    }
-    .api-help a { color: var(--accent); text-decoration: none; }
-    .api-help a:hover { text-decoration: underline; }
+    .textarea:focus { border-color: var(--text-primary); }
+    .textarea::placeholder { color: var(--text-quaternary); }
 
     .examples { margin-top: 14px; }
     .examples-label { font-size: 12px; color: var(--text-tertiary); margin-bottom: 10px; }
@@ -117,12 +102,11 @@
       transition: all 0.15s; text-decoration: none;
     }
     .btn:hover { background: var(--hover-bg); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-primary {
       background: var(--text-primary); color: var(--bg);
       border-color: var(--text-primary);
     }
-    .btn-primary:hover:not(:disabled) { opacity: 0.88; }
+    .btn-primary:hover { opacity: 0.88; }
     .btn svg { width: 16px; height: 16px; flex-shrink: 0; }
 
     .rules { margin-top: 4px; }
@@ -143,67 +127,41 @@
     .dot.p2 { background: var(--positive); }
     .dot.p3 { background: var(--text-quaternary); }
 
-    /* Result area */
-    .result-area { display: none; margin-top: 16px; }
-    .result-area.visible { display: block; }
-    .result-header {
+    /* Prompt preview area */
+    .preview-area { display: none; margin-top: 16px; }
+    .preview-area.visible { display: block; }
+    .preview-header {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 12px;
     }
-    .result-header span { font-size: 14px; font-weight: 500; }
-    .result-box {
+    .preview-header span { font-size: 14px; font-weight: 500; }
+    .preview-box {
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 20px 24px;
-      font-size: 14px;
+      padding: 16px 18px;
+      font-family: var(--font-mono);
+      font-size: 13px;
       line-height: 1.7;
       color: var(--text-primary);
-      max-height: 600px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 320px;
       overflow-y: auto;
     }
-    .result-box h3 { font-size: 16px; margin: 16px 0 8px; font-weight: 600; }
-    .result-box h3:first-child { margin-top: 0; }
-    .result-box table {
-      width: 100%; border-collapse: collapse; margin: 12px 0;
+    .hint {
+      margin-top: 14px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1px solid color-mix(in srgb, var(--positive) 18%, transparent);
+      background: color-mix(in srgb, var(--positive) 7%, transparent);
       font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
     }
-    .result-box th, .result-box td {
-      border: 1px solid var(--border); padding: 8px 10px; text-align: left;
-    }
-    .result-box th { background: var(--surface-2); font-weight: 500; }
-    .result-box code {
-      background: var(--surface); padding: 2px 5px; border-radius: 4px;
-      font-family: var(--font-mono); font-size: 12px;
-    }
-    .result-box ul, .result-box ol { padding-left: 20px; margin: 8px 0; }
-    .result-box li { margin-bottom: 4px; }
-    .result-box hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
-    .result-box strong { font-weight: 600; }
-
-    .loading {
-      display: none; align-items: center; gap: 10px;
-      padding: 12px 16px; border-radius: 10px;
-      background: var(--surface-2); border: 1px solid var(--border);
-      margin-bottom: 16px; font-size: 14px; color: var(--text-secondary);
-    }
-    .loading.visible { display: flex; }
-    .spinner {
-      width: 18px; height: 18px;
-      border: 2px solid var(--border);
-      border-top-color: var(--text-primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .error-box {
-      display: none; padding: 12px 16px; border-radius: 10px;
-      background: color-mix(in srgb, var(--danger) 8%, transparent);
-      border: 1px solid color-mix(in srgb, var(--danger) 20%, transparent);
-      margin-bottom: 16px; font-size: 13px; color: var(--danger);
-    }
-    .error-box.visible { display: block; }
+    .hint strong { color: var(--text-primary); font-weight: 500; }
+    .hint a { color: var(--accent); text-decoration: none; font-weight: 500; }
+    .hint a:hover { text-decoration: underline; }
 
     .toast {
       position: fixed; bottom: 24px; left: 50%;
@@ -230,19 +188,11 @@
   <div class="container">
     <header>
       <h1>Mini CEO — PBI Oluşturucu</h1>
-      <p>İhtiyacını yaz, Kimi AI senin için profesyonel Product Backlog Item'ları oluştursun. Doğrudan bu sayfada sonucu gör.</p>
+      <p>İhtiyacını yaz, hazırlanan prompt'u Kimi Chat'e gönder. Kimi ücretsiz olarak PBI'ları oluştursun.</p>
     </header>
 
     <div class="card">
-      <label class="label">Kimi API Anahtarı <span>(platform.kimi.ai'den alabilirsin)</span></label>
-      <div class="api-row">
-        <input type="password" class="input" id="apiKeyInput" placeholder="sk-..." style="flex:1; margin-bottom:0;">
-      </div>
-      <div class="api-help">
-        API anahtarın yoksa <a href="https://platform.kimi.ai" target="_blank">platform.kimi.ai</a> adresinden "API Keys" bölümünden oluşturabilirsin.
-      </div>
-
-      <label class="label" style="margin-top:16px;">Müşteri ihtiyacını anlat <span>(ne, neden, kime)</span></label>
+      <label class="label">Müşteri ihtiyacını anlat <span>(ne, neden, kime)</span></label>
       <textarea class="textarea" id="needInput" placeholder="Örnek: Bir online fitness koçluk platformu kurmak istiyorum. Kullanıcılar antrenör seçip randevu alabilsin, antrenörler program hazırlayabilsin, ödeme sistemi olsun."></textarea>
 
       <div class="examples">
@@ -268,11 +218,11 @@
       </div>
 
       <div class="actions">
-        <button class="btn btn-primary" id="generateBtn" onclick="generatePBI()">
+        <button class="btn btn-primary" onclick="openKimiChat()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-          PBI Oluştur
+          Kimi Chat'te Aç
         </button>
-        <button class="btn" onclick="copyPrompt()">
+        <button class="btn" onclick="generateAndCopy()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           Prompt'u Kopyala
         </button>
@@ -295,23 +245,19 @@
       </details>
     </div>
 
-    <div class="loading" id="loadingBox">
-      <div class="spinner"></div>
-      <span>Kimi AI PBI'ları oluşturuyor... Bu işlem 10-30 saniye sürebilir.</span>
-    </div>
-
-    <div class="error-box" id="errorBox"></div>
-
-    <div class="result-area" id="resultArea">
+    <div class="preview-area" id="previewArea">
       <div class="card">
-        <div class="result-header">
-          <span>Oluşturulan PBI'lar</span>
-          <button class="btn" onclick="copyResult()" style="padding: 6px 14px; font-size: 12px;">
+        <div class="preview-header">
+          <span>Kimi için hazırlanan prompt</span>
+          <button class="btn" onclick="copyPreview()" style="padding: 6px 14px; font-size: 12px;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:14px;height:14px"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             Kopyala
           </button>
         </div>
-        <div class="result-box" id="resultBox"></div>
+        <div class="preview-box" id="previewBox"></div>
+        <div class="hint">
+          <strong>Adım 2:</strong> Yukarıdaki metni kopyalayıp <a href="https://kimi.com" target="_blank">Kimi Chat</a>'e yapıştır. Kimi senin için PBI'ları oluşturacak.
+        </div>
       </div>
     </div>
 
@@ -323,8 +269,6 @@
   <div class="toast" id="toast">Panoya kopyalandı!</div>
 
   <script>
-    const PROXY_URL = 'https://kimi-proxy.kubilaykcn.workers.dev/chat';
-
     const examples = [
       "Bir SaaS abonelik yönetim platformu kurmak istiyorum. Kullanıcılar aylık/yıllık plan seçebilsin, faturalandırma otomatik olsun, churn analizi yapılsın.",
       "Bir e-ticaret mobil uygulama yapmak istiyorum. Ürün kataloğu, sepet, ödeme, sipariş takibi ve push bildirim olsun. Hedef kitle 25-40 yaş kadın.",
@@ -332,155 +276,43 @@
       "Bir AI destekli müşteri hizmetleri chatbotu kurmak istiyorum. SSS yanıtlasın, canlı desteğe yönlendirsin, ticket oluştursun. E-ticaret sitesine entegre edilecek."
     ];
 
-    const SYSTEM_PROMPT = `SEN BİR "MINI CEO / PRODUCT OWNER"SIN.
-
-Görevin: Benim (müşteri olarak) anlattığım ihtiyacı alıp profesyonel Product Backlog Item'larına (PBI) dönüştürmek.
-
-KURALLAR:
-1. Her PBI maksimum 2 günlük iş yüküne sahip olmalı. Büyük işleri parçala.
-2. Start-up mantığıyla çalış: Sadece yazılım değil; pazarlama, operasyon, hukuki, finans, growth görevleri de PBI olabilir.
-3. Her PBI'da şunlar olmalı:
-   - ID (örn. PBI-001)
-   - Başlık
-   - Açıklama (müşteri ihtiyacı perspektifinden)
-   - Kabul Kriterleri (Given-When-Then formatında, en az 3 madde)
-   - Definition of Done (DoD) - en az 4 madde
-   - Tahmini Süre (saat/gün)
-   - Öncelik Sınıfı
-   - Bağımlılıklar (varsa)
-   - Notlar / Varsayımlar
-4. Öncelik Sınıfları (Maksimum 4 sınıf):
-   - 🔴 P0 - Kritik / Bloklayıcı (Bu yapılmazsa ilerlenemez)
-   - 🟠 P1 - Yüksek / Hızlı Değer (2 haftada bitmeli)
-   - 🟡 P2 - Orta / Planlı (Sprint'e alınabilir)
-   - 🟢 P3 - Düşük / Fikir (Backlog'da bekleyebilir)
-5. PBI'ları önem sırasına göre sırala.
-6. Çıktıyı Markdown tablo + detaylı liste olarak ver.
-7. PBI'ları üzerinde oynama yapabileceğimizi unutma; "taslak" gibi düşün.
-
-MÜŞTERİ İHTİYACI:`;
+    const SYSTEM_PROMPT = `SEN BİR "MINI CEO / PRODUCT OWNER"SIN.\n\nGörevin: Benim (müşteri olarak) anlattığım ihtiyacı alıp profesyonel Product Backlog Item'larına (PBI) dönüştürmek.\n\nKURALLAR:\n1. Her PBI maksimum 2 günlük iş yüküne sahip olmalı. Büyük işleri parçala.\n2. Start-up mantığıyla çalış: Sadece yazılım değil; pazarlama, operasyon, hukuki, finans, growth görevleri de PBI olabilir.\n3. Her PBI'da şunlar olmalı:\n   - ID (örn. PBI-001)\n   - Başlık\n   - Açıklama (müşteri ihtiyacı perspektifinden)\n   - Kabul Kriterleri (Given-When-Then formatında, en az 3 madde)\n   - Definition of Done (DoD) - en az 4 madde\n   - Tahmini Süre (saat/gün)\n   - Öncelik Sınıfı\n   - Bağımlılıklar (varsa)\n   - Notlar / Varsayımlar\n4. Öncelik Sınıfları (Maksimum 4 sınıf):\n   - 🔴 P0 - Kritik / Bloklayıcı (Bu yapılmazsa ilerlenemez)\n   - 🟠 P1 - Yüksek / Hızlı Değer (2 haftada bitmeli)\n   - 🟡 P2 - Orta / Planlı (Sprint'e alınabilir)\n   - 🟢 P3 - Düşük / Fikir (Backlog'da bekleyebilir)\n5. PBI'ları önem sırasına göre sırala.\n6. Çıktıyı Markdown tablo + detaylı liste olarak ver.\n7. PBI'ları üzerinde oynama yapabileceğimizi unutma; "taslak" gibi düşün.\n\nMÜŞTERİ İHTİYACI:`;
 
     function fillExample(idx) {
       document.getElementById('needInput').value = examples[idx];
     }
 
-    function getFullPrompt() {
-      const need = document.getElementById('needInput').value.trim();
-      if (!need) { showToast('Lütfen önce bir ihtiyaç yazın.'); return null; }
-      return SYSTEM_PROMPT + '\n\n' + need;
-    }
-
-    function simpleMarkdownToHtml(md) {
-      let html = md
-        .replace(/^### (.*$)/gim, '<h3>$1</h3>')
-        .replace(/^## (.*$)/gim, '<h2>$1</h2>')
-        .replace(/^# (.*$)/gim, '<h1>$1</h1>')
-        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-        .replace(/\*(.*?)\*/g, '<em>$1</em>')
-        .replace(/`(.*?)`/g, '<code>$1</code>')
-        .replace(/^\> (.*$)/gim, '<blockquote>$1</blockquote>');
-
-      // Tables
-      const lines = html.split('\n');
-      let inTable = false;
-      let tableHtml = '';
-      let result = [];
-      for (let line of lines) {
-        if (line.trim().startsWith('|') && line.trim().endsWith('|')) {
-          if (!inTable) { inTable = true; tableHtml = '<table>'; }
-          const cells = line.split('|').slice(1, -1).map(c => c.trim());
-          if (cells.every(c => c.replace(/[-:]/g, '').trim() === '')) {
-            tableHtml = tableHtml.replace(/<tr>$/, '<tr>'); // header row
-            continue;
-          }
-          const tag = tableHtml.includes('<th>') ? 'td' : 'th';
-          if (!tableHtml.includes('<th>')) {
-            tableHtml += '<tr>' + cells.map(c => '<th>' + c + '</th>').join('') + '</tr>';
-          } else {
-            tableHtml += '<tr>' + cells.map(c => '<td>' + c + '</td>').join('') + '</tr>';
-          }
-        } else {
-          if (inTable) { result.push(tableHtml + '</table>'); inTable = false; tableHtml = ''; }
-          result.push(line);
-        }
+    function buildPrompt() {
+      const userNeed = document.getElementById('needInput').value.trim();
+      if (!userNeed) {
+        showToast('Lütfen önce bir ihtiyaç yazın.');
+        return null;
       }
-      if (inTable) result.push(tableHtml + '</table>');
-      html = result.join('\n');
-
-      // Lists
-      html = html.replace(/^(\s*)- (.*$)/gim, '<li>$2</li>');
-      html = html.replace(/(<li>.*<\/li>\n?)+/g, '<ul>$&</ul>');
-      html = html.replace(/<ul>(<li>.*<\/li>\n?)+<\/ul>/g, match => match.replace(/<li>/g, '<li>').replace(/<\/li>/g, '</li>'));
-
-      // Paragraphs
-      const paras = html.split('\n\n');
-      html = paras.map(p => {
-        p = p.trim();
-        if (!p) return '';
-        if (p.startsWith('<h') || p.startsWith('<table') || p.startsWith('<ul') || p.startsWith('<blockquote')) return p;
-        return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
-      }).join('\n');
-
-      return html;
+      return SYSTEM_PROMPT + '\n\n' + userNeed;
     }
 
-    async function generatePBI() {
-      const apiKey = document.getElementById('apiKeyInput').value.trim();
-      const prompt = getFullPrompt();
+    function openKimiChat() {
+      const prompt = buildPrompt();
       if (!prompt) return;
-
-      if (!apiKey) {
-        showToast('Lütfen Kimi API anahtarını girin.');
-        document.getElementById('apiKeyInput').focus();
-        return;
-      }
-
-      const btn = document.getElementById('generateBtn');
-      btn.disabled = true;
-      document.getElementById('loadingBox').classList.add('visible');
-      document.getElementById('errorBox').classList.remove('visible');
-      document.getElementById('resultArea').classList.remove('visible');
-
-      try {
-        const res = await fetch(PROXY_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            apiKey: apiKey,
-            messages: [
-              { role: 'system', content: 'You are a helpful assistant.' },
-              { role: 'user', content: prompt }
-            ]
-          })
-        });
-
-        const data = await res.json();
-
-        if (data.error) {
-          throw new Error(data.error.message || data.error);
-        }
-
-        const content = data.choices?.[0]?.message?.content || 'Sonuç alınamadı.';
-        document.getElementById('resultBox').innerHTML = simpleMarkdownToHtml(content);
-        document.getElementById('resultArea').classList.add('visible');
-        document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
-      } catch (err) {
-        document.getElementById('errorBox').textContent = 'Hata: ' + err.message;
-        document.getElementById('errorBox').classList.add('visible');
-      } finally {
-        btn.disabled = false;
-        document.getElementById('loadingBox').classList.remove('visible');
-      }
+      const kimiUrl = 'https://kimi.com/?prompt=' + encodeURIComponent(prompt);
+      window.open(kimiUrl, '_blank');
     }
 
-    function copyPrompt() {
-      const prompt = getFullPrompt();
+    function generateAndCopy() {
+      const prompt = buildPrompt();
       if (!prompt) return;
+      showPreview(prompt);
       copyToClipboard(prompt);
     }
 
-    function copyResult() {
-      const text = document.getElementById('resultBox').innerText;
+    function showPreview(text) {
+      document.getElementById('previewBox').textContent = text;
+      document.getElementById('previewArea').classList.add('visible');
+      document.getElementById('previewArea').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function copyPreview() {
+      const text = document.getElementById('previewBox').textContent;
       copyToClipboard(text);
     }
 
