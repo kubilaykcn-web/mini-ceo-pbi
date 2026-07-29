@@ -10,7 +10,6 @@
       --surface: #f7f7f8;
       --surface-2: #fafafa;
       --border: #e5e5e5;
-      --border-strong: #d0d0d0;
       --text-primary: #1a1a1a;
       --text-secondary: #666666;
       --text-tertiary: #999999;
@@ -29,7 +28,6 @@
         --surface: #252525;
         --surface-2: #2a2a2a;
         --border: #333333;
-        --border-strong: #444444;
         --text-primary: #f0f0f0;
         --text-secondary: #aaaaaa;
         --text-tertiary: #777777;
@@ -60,23 +58,23 @@
     }
     .label { font-size: 14px; font-weight: 500; margin-bottom: 8px; display: block; }
     .label span { font-weight: 400; color: var(--text-tertiary); }
-    .textarea {
+    .input, .textarea {
       width: 100%;
-      min-height: 140px;
-      padding: 14px 16px;
+      padding: 12px 14px;
       border: 1px solid var(--border);
       border-radius: 10px;
       font-size: 15px;
       line-height: 1.6;
-      resize: vertical;
       background: var(--bg);
       color: var(--text-primary);
       outline: none;
       transition: border-color 0.2s;
       font-family: var(--font-sans);
     }
-    .textarea:focus { border-color: var(--text-primary); }
-    .textarea::placeholder { color: var(--text-quaternary); }
+    .input:focus, .textarea:focus { border-color: var(--text-primary); }
+    .input::placeholder, .textarea::placeholder { color: var(--text-quaternary); }
+    .textarea { min-height: 140px; resize: vertical; }
+    .input { margin-bottom: 16px; }
 
     .examples { margin-top: 14px; }
     .examples-label { font-size: 12px; color: var(--text-tertiary); margin-bottom: 10px; }
@@ -102,11 +100,12 @@
       transition: all 0.15s; text-decoration: none;
     }
     .btn:hover { background: var(--hover-bg); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-primary {
       background: var(--text-primary); color: var(--bg);
       border-color: var(--text-primary);
     }
-    .btn-primary:hover { opacity: 0.88; }
+    .btn-primary:hover:not(:disabled) { opacity: 0.88; }
     .btn svg { width: 16px; height: 16px; flex-shrink: 0; }
 
     .rules { margin-top: 4px; }
@@ -127,41 +126,78 @@
     .dot.p2 { background: var(--positive); }
     .dot.p3 { background: var(--text-quaternary); }
 
-    /* Prompt preview area */
-    .preview-area { display: none; margin-top: 16px; }
-    .preview-area.visible { display: block; }
-    .preview-header {
+    .loading {
+      display: none; align-items: center; gap: 10px;
+      padding: 12px 16px; border-radius: 10px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      margin-bottom: 16px; font-size: 14px; color: var(--text-secondary);
+    }
+    .loading.visible { display: flex; }
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid var(--border);
+      border-top-color: var(--text-primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .error-box {
+      display: none; padding: 12px 16px; border-radius: 10px;
+      background: color-mix(in srgb, var(--danger) 8%, transparent);
+      border: 1px solid color-mix(in srgb, var(--danger) 20%, transparent);
+      margin-bottom: 16px; font-size: 13px; color: var(--danger);
+      line-height: 1.5;
+    }
+    .error-box.visible { display: block; }
+
+    .result-area { display: none; margin-top: 16px; }
+    .result-area.visible { display: block; }
+    .result-header {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 12px;
     }
-    .preview-header span { font-size: 14px; font-weight: 500; }
-    .preview-box {
+    .result-header span { font-size: 14px; font-weight: 500; }
+    .result-box {
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 16px 18px;
-      font-family: var(--font-mono);
-      font-size: 13px;
+      padding: 20px 24px;
+      font-size: 14px;
       line-height: 1.7;
       color: var(--text-primary);
-      white-space: pre-wrap;
-      word-break: break-word;
-      max-height: 320px;
+      max-height: 700px;
       overflow-y: auto;
     }
-    .hint {
-      margin-top: 14px;
-      padding: 12px 16px;
-      border-radius: 10px;
-      border: 1px solid color-mix(in srgb, var(--positive) 18%, transparent);
-      background: color-mix(in srgb, var(--positive) 7%, transparent);
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.5;
+    .result-box h1, .result-box h2, .result-box h3 { 
+      font-size: 16px; margin: 18px 0 10px; font-weight: 600; 
     }
-    .hint strong { color: var(--text-primary); font-weight: 500; }
-    .hint a { color: var(--accent); text-decoration: none; font-weight: 500; }
-    .hint a:hover { text-decoration: underline; }
+    .result-box h1:first-child, .result-box h2:first-child, .result-box h3:first-child { margin-top: 0; }
+    .result-box table {
+      width: 100%; border-collapse: collapse; margin: 12px 0;
+      font-size: 13px;
+    }
+    .result-box th, .result-box td {
+      border: 1px solid var(--border); padding: 8px 10px; text-align: left;
+    }
+    .result-box th { background: var(--surface-2); font-weight: 500; }
+    .result-box code {
+      background: var(--surface); padding: 2px 5px; border-radius: 4px;
+      font-family: var(--font-mono); font-size: 12px;
+    }
+    .result-box pre {
+      background: var(--surface); padding: 12px; border-radius: 8px;
+      overflow-x: auto; font-family: var(--font-mono); font-size: 12px;
+      margin: 10px 0;
+    }
+    .result-box ul, .result-box ol { padding-left: 20px; margin: 8px 0; }
+    .result-box li { margin-bottom: 4px; }
+    .result-box hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    .result-box strong { font-weight: 600; }
+    .result-box blockquote {
+      border-left: 3px solid var(--border); padding-left: 12px;
+      margin: 10px 0; color: var(--text-secondary);
+    }
 
     .toast {
       position: fixed; bottom: 24px; left: 50%;
@@ -188,10 +224,16 @@
   <div class="container">
     <header>
       <h1>Mini CEO — PBI Oluşturucu</h1>
-      <p>İhtiyacını yaz, hazırlanan prompt'u Kimi Chat'e gönder. Kimi ücretsiz olarak PBI'ları oluştursun.</p>
+      <p>İhtiyacını yaz, Google Gemini AI senin için profesyonel Product Backlog Item'ları oluştursun. Doğrudan bu sayfada sonucu gör.</p>
     </header>
 
     <div class="card">
+      <label class="label">Google API Anahtarı <span>(aistudio.google.com/app/apikey'den ücretsiz alabilirsin)</span></label>
+      <input type="password" class="input" id="apiKeyInput" placeholder="AIza..." style="margin-bottom:4px;">
+      <div style="font-size:12px;color:var(--text-tertiary);margin-bottom:12px;">
+        API anahtarın yoksa <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color:var(--accent);text-decoration:none;">aistudio.google.com/app/apikey</a> adresinden ücretsiz oluşturabilirsin.
+      </div>
+
       <label class="label">Müşteri ihtiyacını anlat <span>(ne, neden, kime)</span></label>
       <textarea class="textarea" id="needInput" placeholder="Örnek: Bir online fitness koçluk platformu kurmak istiyorum. Kullanıcılar antrenör seçip randevu alabilsin, antrenörler program hazırlayabilsin, ödeme sistemi olsun."></textarea>
 
@@ -218,11 +260,11 @@
       </div>
 
       <div class="actions">
-        <button class="btn btn-primary" onclick="openKimiChat()">
+        <button class="btn btn-primary" id="generateBtn" onclick="generatePBI()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-          Kimi Chat'te Aç
+          PBI Oluştur
         </button>
-        <button class="btn" onclick="generateAndCopy()">
+        <button class="btn" onclick="copyPrompt()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           Prompt'u Kopyala
         </button>
@@ -245,30 +287,42 @@
       </details>
     </div>
 
-    <div class="preview-area" id="previewArea">
+    <div class="loading" id="loadingBox">
+      <div class="spinner"></div>
+      <span>Gemini AI PBI'ları oluşturuyor... Bu işlem 10-20 saniye sürebilir.</span>
+    </div>
+
+    <div class="error-box" id="errorBox"></div>
+
+    <div class="result-area" id="resultArea">
       <div class="card">
-        <div class="preview-header">
-          <span>Kimi için hazırlanan prompt</span>
-          <button class="btn" onclick="copyPreview()" style="padding: 6px 14px; font-size: 12px;">
+        <div class="result-header">
+          <span>Oluşturulan PBI'lar</span>
+          <button class="btn" onclick="copyResult()" style="padding: 6px 14px; font-size: 12px;">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:14px;height:14px"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
             Kopyala
           </button>
         </div>
-        <div class="preview-box" id="previewBox"></div>
-        <div class="hint">
-          <strong>Adım 2:</strong> Yukarıdaki metni kopyalayıp <a href="https://kimi.com" target="_blank">Kimi Chat</a>'e yapıştır. Kimi senin için PBI'ları oluşturacak.
-        </div>
+        <div class="result-box" id="resultBox"></div>
       </div>
     </div>
 
     <footer>
-      Mini CEO PBI Oluşturucu — Kimi × Moonshot AI
+      Mini CEO PBI Oluşturucu — Google Gemini × Mini CEO
     </footer>
   </div>
 
   <div class="toast" id="toast">Panoya kopyalandı!</div>
 
   <script>
+    // ======================
+    // KONFİGÜRASYON
+    // ======================
+    const PROXY_URL = 'https://kimi-proxy.kubilaykcn.workers.dev/chat';
+
+    // ======================
+    // ÖRNEKLER
+    // ======================
     const examples = [
       "Bir SaaS abonelik yönetim platformu kurmak istiyorum. Kullanıcılar aylık/yıllık plan seçebilsin, faturalandırma otomatik olsun, churn analizi yapılsın.",
       "Bir e-ticaret mobil uygulama yapmak istiyorum. Ürün kataloğu, sepet, ödeme, sipariş takibi ve push bildirim olsun. Hedef kitle 25-40 yaş kadın.",
@@ -276,8 +330,40 @@
       "Bir AI destekli müşteri hizmetleri chatbotu kurmak istiyorum. SSS yanıtlasın, canlı desteğe yönlendirsin, ticket oluştursun. E-ticaret sitesine entegre edilecek."
     ];
 
-    const SYSTEM_PROMPT = `SEN BİR "MINI CEO / PRODUCT OWNER"SIN.\n\nGörevin: Benim (müşteri olarak) anlattığım ihtiyacı alıp profesyonel Product Backlog Item'larına (PBI) dönüştürmek.\n\nKURALLAR:\n1. Her PBI maksimum 2 günlük iş yüküne sahip olmalı. Büyük işleri parçala.\n2. Start-up mantığıyla çalış: Sadece yazılım değil; pazarlama, operasyon, hukuki, finans, growth görevleri de PBI olabilir.\n3. Her PBI'da şunlar olmalı:\n   - ID (örn. PBI-001)\n   - Başlık\n   - Açıklama (müşteri ihtiyacı perspektifinden)\n   - Kabul Kriterleri (Given-When-Then formatında, en az 3 madde)\n   - Definition of Done (DoD) - en az 4 madde\n   - Tahmini Süre (saat/gün)\n   - Öncelik Sınıfı\n   - Bağımlılıklar (varsa)\n   - Notlar / Varsayımlar\n4. Öncelik Sınıfları (Maksimum 4 sınıf):\n   - 🔴 P0 - Kritik / Bloklayıcı (Bu yapılmazsa ilerlenemez)\n   - 🟠 P1 - Yüksek / Hızlı Değer (2 haftada bitmeli)\n   - 🟡 P2 - Orta / Planlı (Sprint'e alınabilir)\n   - 🟢 P3 - Düşük / Fikir (Backlog'da bekleyebilir)\n5. PBI'ları önem sırasına göre sırala.\n6. Çıktıyı Markdown tablo + detaylı liste olarak ver.\n7. PBI'ları üzerinde oynama yapabileceğimizi unutma; "taslak" gibi düşün.\n\nMÜŞTERİ İHTİYACI:`;
+    // ======================
+    // SİSTEM PROMPTU
+    // ======================
+    const SYSTEM_PROMPT = `SEN BİR "MINI CEO / PRODUCT OWNER"SIN.
 
+Görevin: Benim (müşteri olarak) anlattığım ihtiyacı alıp profesyonel Product Backlog Item'larına (PBI) dönüştürmek.
+
+KURALLAR:
+1. Her PBI maksimum 2 günlük iş yüküne sahip olmalı. Büyük işleri parçala.
+2. Start-up mantığıyla çalış: Sadece yazılım değil; pazarlama, operasyon, hukuki, finans, growth görevleri de PBI olabilir.
+3. Her PBI'da şunlar olmalı:
+   - ID (örn. PBI-001)
+   - Başlık
+   - Açıklama (müşteri ihtiyacı perspektifinden)
+   - Kabul Kriterleri (Given-When-Then formatında, en az 3 madde)
+   - Definition of Done (DoD) - en az 4 madde
+   - Tahmini Süre (saat/gün)
+   - Öncelik Sınıfı
+   - Bağımlılıklar (varsa)
+   - Notlar / Varsayımlar
+4. Öncelik Sınıfları (Maksimum 4 sınıf):
+   - 🔴 P0 - Kritik / Bloklayıcı (Bu yapılmazsa ilerlenemez)
+   - 🟠 P1 - Yüksek / Hızlı Değer (2 haftada bitmeli)
+   - 🟡 P2 - Orta / Planlı (Sprint'e alınabilir)
+   - 🟢 P3 - Düşük / Fikir (Backlog'da bekleyebilir)
+5. PBI'ları önem sırasına göre sırala.
+6. Çıktıyı Markdown tablo + detaylı liste olarak ver.
+7. PBI'ları üzerinde oynama yapabileceğimizi unutma; "taslak" gibi düşün.
+
+MÜŞTERİ İHTİYACI:`;
+
+    // ======================
+    // YARDIMCI FONKSİYONLAR
+    // ======================
     function fillExample(idx) {
       document.getElementById('needInput').value = examples[idx];
     }
@@ -291,29 +377,11 @@
       return SYSTEM_PROMPT + '\n\n' + userNeed;
     }
 
-    function openKimiChat() {
-      const prompt = buildPrompt();
-      if (!prompt) return;
-      const kimiUrl = 'https://kimi.com/?prompt=' + encodeURIComponent(prompt);
-      window.open(kimiUrl, '_blank');
-    }
-
-    function generateAndCopy() {
-      const prompt = buildPrompt();
-      if (!prompt) return;
-      showPreview(prompt);
-      copyToClipboard(prompt);
-    }
-
-    function showPreview(text) {
-      document.getElementById('previewBox').textContent = text;
-      document.getElementById('previewArea').classList.add('visible');
-      document.getElementById('previewArea').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    function copyPreview() {
-      const text = document.getElementById('previewBox').textContent;
-      copyToClipboard(text);
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2200);
     }
 
     function copyToClipboard(text) {
@@ -330,11 +398,157 @@
       }
     }
 
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2200);
+    function copyPrompt() {
+      const prompt = buildPrompt();
+      if (prompt) copyToClipboard(prompt);
+    }
+
+    function copyResult() {
+      const text = document.getElementById('resultBox').innerText;
+      copyToClipboard(text);
+    }
+
+    // ======================
+    // MARKDOWN -> HTML
+    // ======================
+    function markdownToHtml(md) {
+      let html = md;
+
+      // Escape HTML entities
+      html = html.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+      // Code blocks
+      html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+
+      // Inline code
+      html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+      // Headers
+      html = html.replace(/^#### (.*$)/gim, '<h4>$1</h4>');
+      html = html.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+      html = html.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+      html = html.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+
+      // Bold & Italic
+      html = html.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
+      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+
+      // Blockquote
+      html = html.replace(/^\> (.*$)/gim, '<blockquote>$1</blockquote>');
+
+      // Horizontal rule
+      html = html.replace(/^---$/gim, '<hr>');
+
+      // Links
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" style="color:var(--accent);text-decoration:none;">$1</a>');
+
+      // Tables
+      const lines = html.split('\n');
+      let result = [];
+      let inTable = false;
+      let tableBuffer = [];
+
+      function flushTable() {
+        if (tableBuffer.length === 0) return;
+        let tableHtml = '<table>';
+        tableBuffer.forEach((row, idx) => {
+          if (row.cells.every(c => c.replace(/[-:\s]/g, '') === '')) return; // separator row
+          const tag = idx === 0 ? 'th' : 'td';
+          tableHtml += '<tr>' + row.cells.map(c => `<${tag}>${c}</${tag}>`).join('') + '</tr>';
+        });
+        tableHtml += '</table>';
+        result.push(tableHtml);
+        tableBuffer = [];
+        inTable = false;
+      }
+
+      for (let line of lines) {
+        const trimmed = line.trim();
+        if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+          inTable = true;
+          const cells = trimmed.slice(1, -1).split('|').map(c => c.trim());
+          tableBuffer.push({ cells });
+        } else {
+          if (inTable) flushTable();
+          result.push(line);
+        }
+      }
+      if (inTable) flushTable();
+      html = result.join('\n');
+
+      // Lists
+      html = html.replace(/^(\s*)- (.*$)/gim, '<li>$2</li>');
+      html = html.replace(/^(\s*)\d+\. (.*$)/gim, '<li>$2</li>');
+
+      // Group consecutive li's into ul/ol
+      const listRegex = /(<li>.*?<\/li>\n?)+/gs;
+      html = html.replace(listRegex, match => {
+        const isOrdered = false; // simplified
+        return `<ul>${match}</ul>`;
+      });
+
+      // Paragraphs
+      const blocks = html.split('\n\n');
+      html = blocks.map(block => {
+        block = block.trim();
+        if (!block) return '';
+        if (/^<(h\d|table|ul|ol|blockquote|pre|hr)/.test(block)) return block;
+        return '<p>' + block.replace(/\n/g, '<br>') + '</p>';
+      }).join('\n');
+
+      return html;
+    }
+
+    // ======================
+    // ANA FONKSİYON: PBI OLUŞTUR
+    // ======================
+    async function generatePBI() {
+      const apiKey = document.getElementById('apiKeyInput').value.trim();
+      const prompt = buildPrompt();
+
+      if (!prompt) return;
+      if (!apiKey) {
+        showToast('Lütfen Google API anahtarını girin.');
+        document.getElementById('apiKeyInput').focus();
+        return;
+      }
+
+      const btn = document.getElementById('generateBtn');
+      btn.disabled = true;
+      document.getElementById('loadingBox').classList.add('visible');
+      document.getElementById('errorBox').classList.remove('visible');
+      document.getElementById('resultArea').classList.remove('visible');
+
+      try {
+        const res = await fetch(PROXY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ apiKey: apiKey, prompt: prompt })
+        });
+
+        const data = await res.json();
+
+        if (data.error) {
+          throw new Error(data.error.message || data.error);
+        }
+
+        // Gemini response format
+        const content = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!content) {
+          throw new Error('AI yanıtı boş geldi. Lütfen tekrar deneyin.');
+        }
+
+        document.getElementById('resultBox').innerHTML = markdownToHtml(content);
+        document.getElementById('resultArea').classList.add('visible');
+        document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (err) {
+        document.getElementById('errorBox').textContent = 'Hata: ' + err.message;
+        document.getElementById('errorBox').classList.add('visible');
+      } finally {
+        btn.disabled = false;
+        document.getElementById('loadingBox').classList.remove('visible');
+      }
     }
   </script>
 </body>
